@@ -3,6 +3,7 @@ package com.spring.service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,27 @@ public class PropertyService {
 	public List<Property> retriveAllProperties() {
 		return propertyRepository.findAll();
 	}
-	// hattos
+	
 	public ResponseEntity<Object> addProperty(Property property) {
+	     Property savedProperty = propertyRepository.save(property);
+	     URI location =  ServletUriComponentsBuilder
+	     .fromCurrentRequest()
+	     .path("/{id}")
+	     .buildAndExpand(savedProperty.getId()).toUri();
+	     return ResponseEntity.created(location).build();
+	  }
+	
+	public Optional<Property> getPropertyById(Integer id) {
+		
+		return propertyRepository.findById(id);
+	}
+	
+	public String deletePropertyById(Integer id) {
+		propertyRepository.deleteById(id);
+		return "Successfully Deleted property with ID:- " + id;
+	}
+	
+	public ResponseEntity<Object> updateProperty(Property property) {
 	     Property savedProperty = propertyRepository.save(property);
 	     URI location =  ServletUriComponentsBuilder
 	     .fromCurrentRequest()
