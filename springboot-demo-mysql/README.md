@@ -1,130 +1,127 @@
-# Spring Boot [Rest API] - H2 Database
+# Spring Boot [Rest API] - SQL Database using Docker
 
-CRUD Operations using Spring Boot and H2 Database.
+CRUD Operations using Spring Boot and MYSQL Database using docker-compose.
+
+Docker is required to be install on the machine.
 
 ## Installation
-
-Import Maven based project in any of your Favourite IDE.
+1) Clone the Repo & run the following commands.
 
 ```bash
-./mvnw spring-boot:run
+docker-compose up
 ```
+
 ## Output
+
 Open in Browser
 
 Access all the endpoints using Swagger UI.
 
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8084/swagger-ui.html
 ```
-Access H2 Database.
+Access phpMyAdmin.
 
 ```
-http://localhost:8080/h2-console
+http://localhost:8082/
 ```
+
 ## Usage
-### PropertyService.java
-addProperty() method Saving property to the in-memory database H2.
-
-```java
-	public ResponseEntity<Object> addProperty(Property property) {
-	     Property savedProperty = propertyRepository.save(property);
-	     URI location =  ServletUriComponentsBuilder
-	     .fromCurrentRequest()
-	     .path("/{id}")
-	     .buildAndExpand(savedProperty.getId()).toUri();
-	     return ResponseEntity.created(location).build();
-	  }
-```
-
-retriveAllProperties() Method to get all the properties from the DB.
-
-```java
-public List<Property> retriveAllProperties() {
-		return propertyRepository.findAll();
-	}
-```
-
-getPropertyByid() Method to find property by ID.
-
-```java
-public Optional<Property> getPropertyById(Integer id) {
-	    return propertyRepository.findById(id);
-	}
-```
-
-deletePropertyByid() Method to delete property by ID.
-
-```java
-public String deletePropertyById(Integer id) {
-		propertyRepository.deleteById(id);
-		return "Successfully Deleted property with ID:- " + id;
-	}
-```
-
-updateProperty() method to update existing property.
-
-```java
-public ResponseEntity<Object> updateProperty(Property property) {
-	     Property savedProperty = propertyRepository.save(property);
-	     URI location =  ServletUriComponentsBuilder
-	     .fromCurrentRequest()
-	     .path("/{id}")
-	     .buildAndExpand(savedProperty.getId()).toUri();
-	     return ResponseEntity.created(location).build();
-	  }
-```
-
-### PropertyController.java
-
-```java
-@GetMapping("/property")
-	public List<Property> retriveAllProperties() {
-		return propertyService.retriveAllProperties();
-	}
-```
-```java
-@PostMapping("/property")
-	public ResponseEntity<Object> addProperty(@RequestBody Property property) {
-	     return propertyService.addProperty(property);
-	  }
-```
-
-```java
-@GetMapping("/property/{id}")
-	public Optional<Property> getPropertyById(@PathVariable Integer id) {
-		return propertyService.getPropertyById(id);
-	}
-```
-
-```java
-@DeleteMapping("/property/{id}")
-	public void deletePropertyById(@PathVariable Integer id) {
-		propertyService.deletePropertyById(id);
-		
-	}
-```
-
-```java
-@PatchMapping("/property")
-	public ResponseEntity<Object> updateProperty(@RequestBody Property property) {
-	     return propertyService.updateProperty(property);
-	  }
-```
-
+[Check Spring Boot H2 Repo](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-h2)
 ## Configuration
+
 ### application.properties
 
 ```c
 spring.jpa.show-sql = true
+server.port=8084
+spring.application.name=property-service
 
-# Enabling H2 Console
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.jpa.defer-datasource-initialization=true
-spring.h2.console.enabled=true
+# MYSQL Config
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.datasource.url=jdbc:mysql://mysql-db:3306/property?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=spring
+spring.datasource.driver-class-name =com.mysql.cj.jdbc.Driver
 
-# Enable Web Access
-spring.h2.console.settings.web-allow-others=true
+spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.initialization-mode=never
 ```
-## Credits
-[in28Minutes](https://www.udemy.com/user/in28minutes/)
+
+### docker-compose.yml
+
+```c
+version: '3.3'
+
+services:
+    #service 1: definition of mysql database
+    db:
+      image: mysql:latest
+      container_name: mysql-db  
+      environment:
+        - MYSQL_ROOT_PASSWORD=spring
+      ports:
+        - "3306:3306"
+      restart: always
+      
+    #service 2: definition of phpMyAdmin
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin:latest
+      container_name: my-php-myadmin
+      ports:
+        - "8082:80"
+      restart: always
+        
+      depends_on:
+        - db
+      environment:
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: spring
+      
+    
+    
+    #service 3: definition of your spring-boot app 
+    customerservice:                        #it is just a name, which will be used only in this file.
+      image: property-service               #name of the image after dockerfile executes
+      container_name: property-service-app  #name of the container created from docker image
+      build:
+        context: .                          #docker file path (. means root directory)
+        dockerfile: Dockerfile              #docker file name
+      ports:
+        - "8084:8084"                       #docker containter port with your os port
+      restart: always
+        
+      depends_on:                           #define dependencies of this app
+        - db                                #dependency name (which is defined with this name 'db' in this file earlier)
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/property?createDatabaseIfNotExist=true
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: spring
+```
+### Dockerfile
+```c
+FROM openjdk:11 as mysqldoc
+EXPOSE 8084
+WORKDIR /app
+
+# Copy maven executable to the image
+COPY mvnw .
+COPY .mvn .mvn
+
+# Copy the pom.xml file
+COPY pom.xml .
+
+# Copy the project source
+COPY ./src ./src
+COPY ./pom.xml ./pom.xml
+
+RUN chmod 755 /app/mvnw
+
+RUN ./mvnw dependency:go-offline -B
+
+RUN ./mvnw package -DskipTests
+RUN ls -al
+ENTRYPOINT ["java","-jar","target/springboot-demo-mysql-0.0.1-SNAPSHOT.jar"]
+```
