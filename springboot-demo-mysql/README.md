@@ -46,7 +46,6 @@ spring.datasource.driver-class-name =com.mysql.cj.jdbc.Driver
 
 spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
 spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-spring.jpa.hibernate.ddl-auto=update
 spring.datasource.initialization-mode=never
 ```
 
