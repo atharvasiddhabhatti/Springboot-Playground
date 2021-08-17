@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.entity.Property;
+import com.spring.exception.CustomExceptionHandling;
+import com.spring.exception.GlobalExceptionHandler;
 import com.spring.service.PropertyService;
 
 @RestController
@@ -25,7 +27,9 @@ public class PropertyController {
 	
 	@GetMapping(value="/{id}")
 	public Optional<Property> findPropertyById(@PathVariable Integer id) {
-		return propertyService.findPropertyById(id);
+		Optional<Property> property = Optional.ofNullable(propertyService.findPropertyById(id).orElseThrow(() -> new GlobalExceptionHandler()));
+			return property;
+			
 	}
 	@PostMapping(value="/addproperty")
 	public Property addProperty(@RequestBody Property property) {
@@ -35,9 +39,13 @@ public class PropertyController {
 	public Property updateProperty(@RequestBody Property property) {
 		return propertyService.addProperty(property);
 	}
-	@GetMapping("/getpropertybyid")
+	@GetMapping("/getpropertybystatus")
 	public List<Property> findPropertyByStatus(@RequestParam String status) {
-		return propertyService.findPropertyByStatus(status);
+		List<Property> property = propertyService.findPropertyByStatus(status);
+		if(property.isEmpty())
+			throw new GlobalExceptionHandler();
+		
+		return property;
 	}
 }
 // DWZPS3196F
