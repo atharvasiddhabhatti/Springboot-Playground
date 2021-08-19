@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+    #service 1: definition of mysql database
+    rabbitmq:
+      image: rabbitmq:3-management
+      container_name: rabbitmq  
+      hostname: "rabbit"
+      ports:
+        - "15672:15672"
+        - "5672:5672"
+      volumes:
+        - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
+    
+    #service 3: definition of your spring-boot app 
+    orderservice:                        #it is just a name, which will be used only in this file.
+      image: order-service               #name of the image after dockerfile executes
+      container_name: order-service-app  #name of the container created from docker image
+      build:
+        context: .                          #docker file path (. means root directory)
+        dockerfile: Dockerfile              #docker file name
+      ports:
+        - "8081:8081"                       #docker containter port with your os port
+      restart: always
+        
+      depends_on:                           #define dependencies of this app
+        - rabbitmq                                #dependency name (which is defined with this name 'db' in this file earlier)
