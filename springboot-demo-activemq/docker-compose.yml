@@ -5,12 +5,10 @@ services:
     rabbitmq:
       image: rabbitmq:3-management
       container_name: rabbitmq  
-      hostname: "rabbit"
+      restart: always
       ports:
         - "15672:15672"
         - "5672:5672"
-      volumes:
-        - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
     
     #service 3: definition of your spring-boot app 
     orderservice:                        #it is just a name, which will be used only in this file.
@@ -20,8 +18,9 @@ services:
         context: .                          #docker file path (. means root directory)
         dockerfile: Dockerfile              #docker file name
       ports:
-        - "8081:8081"                       #docker containter port with your os port
+        - "8081:8080"                       #docker containter port with your os port
       restart: always
-        
+      environment:
+        - SPRING_RABBITMQ_HOST=rabbitmq  
       depends_on:                           #define dependencies of this app
         - rabbitmq                                #dependency name (which is defined with this name 'db' in this file earlier)
