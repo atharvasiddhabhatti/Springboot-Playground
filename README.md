@@ -7,5 +7,6 @@ Collection of different Spring Framework projects
 |Spring Boot MYSQL DB Example |[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-mysql)|
 |Spring Boot Rabbit MQ Example |[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-activemq)|
 |Spring Boot JWT Example with H2-DB|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-h2-jwt)|
+|Spring Boot Mapping Demo|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-mapping)|
 
 More projects are getting added regularly....
