@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-@ToString 
+@ToString
 public class OrderStatus {
 
 	private Order order;
 	private String status; 
-	private String message; 
+	private String message;	
 }

@@ -10,10 +10,9 @@ import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
-@Setter
 @Getter
+@Setter
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

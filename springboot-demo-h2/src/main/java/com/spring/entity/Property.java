@@ -3,13 +3,14 @@ package com.spring.entity;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
-@Entity
-@Setter
 @Getter
+@Setter
+@AllArgsConstructor
+@Entity
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +43,9 @@ public class Property {
     private String status;
     @Column
     private String username;
+
+    
+
+    
 }
 
