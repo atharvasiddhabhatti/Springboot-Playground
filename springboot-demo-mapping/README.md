@@ -58,8 +58,8 @@ Following annotations are used in the Customer Entity class to join two tables.C
 	private Customer customer;
 ```
 ## Output
-![alt Output1](./output/image1.png)
-![alt Output2](./output/image2.png)
+![alt Output1](./output/output1.png)
+![alt Output2](./output/output2.png)
 ## Configuration
 ### application.properties
 
