@@ -1,6 +1,8 @@
 package com.spring.entity;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,48 +13,58 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table
+@Table(name = "customer_details")
 public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	private String name;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "customer_item",
-			joinColumns = {@JoinColumn(name = "customer_id")},
-			inverseJoinColumns = {@JoinColumn(name = "item_id")})
-	private Item item;
-	
-		
-	public int getId() {
-		return id;
-	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	@Column(name = "customer_name")
+	private String name;
+	@Column(name = "customer_email")
+	private String email;
+
+	
+	@OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "item_id")
+	private Item item;
+
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Item getItem() {
-		return item; 
+
+
+	public String getEmail() {
+		return email;
 	}
-	
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public Item getItem() {
+		return item;
+	}
+
+
 	public void setItem(Item item) {
 		this.item = item;
 	}
 
-	public Customer(String name) {
-		super();
+	public Customer(String name, String email, Item item) {
 		this.name = name;
+		this.email = email;
+		this.item = item;
 	}
-	
-	
+	public Customer() {
+		super();
+	}		
 }

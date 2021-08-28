@@ -16,8 +16,7 @@ public class SpringbootDemoMappingApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
-	@Autowired
-	private ItemRepository itemRepository;
+	
 
 	public static void main(String[] args)  {
 		SpringApplication.run(SpringbootDemoMappingApplication.class, args);
@@ -25,11 +24,17 @@ public class SpringbootDemoMappingApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Customer customer = new Customer("John");
-		Item item1 = new Item("Item1");
-		customer.setItem(item1);
+		Customer customer = new Customer();
+		customer.setName("Atharva Siddhabhatti");
+		customer.setEmail("atharvasiddhabhatti@gmail.com");
+		Item item = new Item();
+		item.setName("Macbook");
+		item.setQty(1);
+		customer.setItem(item);
+		item.setCustomer(customer);
 		customerRepository.save(customer);
 		
+
 		
 		
 	}

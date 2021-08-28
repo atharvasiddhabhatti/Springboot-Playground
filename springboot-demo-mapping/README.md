@@ -29,9 +29,14 @@ run() method is run when the application is started. The data is added in the da
 ```java
 	@Override
 	public void run(String... args) throws Exception {
-		Customer customer = new Customer("John");
-		Item item1 = new Item("Item1");
-		customer.setItem(item1);
+		Customer customer = new Customer();
+		customer.setName("Atharva Siddhabhatti");
+		customer.setEmail("atharvasiddhabhatti@gmail.com");
+		Item item = new Item();
+		item.setName("Macbook");
+		item.setQty(1);
+		customer.setItem(item);
+		item.setCustomer(customer);
 		customerRepository.save(customer);
 		
 ```
@@ -41,24 +46,20 @@ run() method is run when the application is started. The data is added in the da
 Following annotations are used in the Customer Entity class to join two tables.Check the class file to view other entities.
 
 ```java
-@OneToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "customer_item",
-			joinColumns = {@JoinColumn(name = "customer_id")},
-			inverseJoinColumns = {@JoinColumn(name = "item_id")})
+@OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "item_id")
 	private Item item;
 ```
 
 
 ### Item.java
-As JoinColumns and InverseJoinColumns are used in the customer class there is no need to add any annotation to join the entities.
-
+```java
+@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
+	private Customer customer;
+```
 ## Output
 ![alt Output1](./output/image1.png)
 ![alt Output2](./output/image2.png)
-![alt Output3](./output/image3.png)
-
-
-
 ## Configuration
 ### application.properties
 
