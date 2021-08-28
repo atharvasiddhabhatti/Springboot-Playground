@@ -1,4 +1,4 @@
-# Spring Boot One-To-One Mapping Demo With H2 database
+# Spring Boot One To Many Mapping Demo With H2 database
 
 There are three basic entity relationships:-
 
@@ -27,35 +27,26 @@ http://localhost:8080/h2-console
 run() method is run when the application is started. The data is added in the database.
 
 ```java
-	@Override
-	public void run(String... args) throws Exception {
-		Customer customer = new Customer();
-		customer.setName("Atharva Siddhabhatti");
-		customer.setEmail("atharvasiddhabhatti@gmail.com");
-		Item item = new Item();
-		item.setName("Macbook");
-		item.setQty(1);
-		customer.setItem(item);
-		item.setCustomer(customer);
-		customerRepository.save(customer);
+	Post post = new Post("Spring Boot Post Title","Spring Boot Post Description");
+		Comment comment1 = new Comment("Thanks for uploading");
+		Comment comment2 = new Comment("Comment2 test");
+		Comment comment3 = new Comment("Comment3 test");
 		
+		post.getComments().add(comment1);
+		post.getComments().add(comment2);
+		post.getComments().add(comment3);
+		
+		postRepository.save(post);
 ```
 
 
-### Customer.java
-Following annotations are used in the Customer Entity class to join two tables.Check the class file to view other entities.
+### Post.java
+Id column is used to map the post and comments together.
 
 ```java
-@OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "item_id")
-	private Item item;
-```
-
-
-### Item.java
-```java
-@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
-	private Customer customer;
+@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "post_Comment_id",referencedColumnName = "id")
+	List<Comment> comments = new ArrayList<>();
 ```
 ## Output
 ![alt Output1](./output/output1.png)
