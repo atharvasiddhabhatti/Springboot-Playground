@@ -11,7 +11,7 @@
 	<groupId>com.spring</groupId>
 	<artifactId>springboot-demo-mapping</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot-demo-mapping</name>
+	<name>springboot-demo-one-to-one-mapping</name>
 	<description>Spring Boot Mapping Example</description>
 	<properties>
 		<java.version>11</java.version>
