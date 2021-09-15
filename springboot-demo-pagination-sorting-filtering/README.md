@@ -22,7 +22,7 @@ http://localhost:8080/h2-console
 |:---:|:---:|:---:|:---:|
 | http://localhost:8080/student/search | GET | - | To get all students in paginated format |
 | http://localhost:8080/student | POST | { "id":214214,"name":"Atharva","rollno":32 } | To Add Students to the DB |
-| http://localhost:8080/pagination?pageSize=5 | GET | - | To Add Students to the DB |
+| http://localhost:8080/pagination?pageSize=5 | GET | - | to get first 5 student details |
 | http://localhost:8080/pagination?pageSize=5&pageNo=1 | GET | - | To get student details by pagesize 5 and pageno 2 |
 | http://localhost:8080/pagination?pageSize=5&pageNo=2 | GET | - | To get student details by pagesize 5 and pageno 1 |
 | http://localhost:8080/pagination?pageSize=5&pageNo=1&sortBy=id | GET | - | To sort student details by id |
