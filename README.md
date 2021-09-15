@@ -10,5 +10,6 @@ Collection of different Spring Framework projects
 |Spring Boot One To One Mapping Demo|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-one-to-one-mapping)|
 |Spring Boot One To Many Mapping Demo|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-one-to-many-mapping)|
 |Spring Boot Mongo DB Example|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-mongodb-crud)|
+|Spring Boot Pagination and Sorting Example|[Click Here](https://github.com/atharvasiddhabhatti/Springboot-Playground/tree/main/springboot-demo-pagination-sorting-filtering)|
 
 More projects are getting added regularly....
