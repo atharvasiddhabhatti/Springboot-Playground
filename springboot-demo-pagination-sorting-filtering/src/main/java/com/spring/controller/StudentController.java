@@ -23,10 +23,6 @@ public class StudentController {
 		return ResponseEntity.ok(studentService.readStudent(pageable));
 	}
 	
-//	@GetMapping("/student/search/filter")
-//    public ResponseEntity<PaginatedStudentResponse> readBooksWithFilter (@RequestParam("query") String query, Pageable pageable) {
-//        return ResponseEntity.ok(studentService.filterStudents(query, pageable));
-//    }
 	@PostMapping("/student")
 	public ResponseEntity<Student> createProduct(@RequestBody Student student){
 		return ResponseEntity.ok().body(this.studentService.createStudent(student));
