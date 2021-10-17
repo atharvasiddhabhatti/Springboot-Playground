@@ -37,6 +37,64 @@ public interface SortingRepository extends PagingAndSortingRepository<Student, I
 
 }
 ```
+### StudentService.java
+```java
+public PaginatedStudentResponse readStudent(Pageable pageable) {
+		Page<Student> students = studentRepository.findAll(pageable);
+		return PaginatedStudentResponse.builder()
+				.numberOfItems(students.getTotalElements()).numberOfPages(students.getTotalPages())
+				.studentList(students.getContent())
+				.build();
+				
+	}
+	
+	public List<Student> getAllStudents(Integer pageNo, Integer pageSize, String sortBy)
+		{
+			Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+			Page<Student> pageResult = studentRepository.findAll(paging);
+			
+			if(pageResult.hasContent()) {
+				return pageResult.getContent();
+			}
+			else
+			{
+				return new ArrayList<Student>();
+			}
+		}
+	
+	public Student createStudent(Student student) {
+		return studentRepository.save(student);
+	}
+```
+### PaginationController.java
+```java
+
+	@GetMapping
+	public ResponseEntity<List<Student>> getAllStudents(
+			@RequestParam(defaultValue = "0") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize,
+			@RequestParam(defaultValue = "id") String sortBy)
+	{
+		List<Student> list = service.getAllStudents(pageNo, pageSize, sortBy);
+		
+		return new ResponseEntity<List<Student>>(list, new HttpHeaders(),HttpStatus.OK);
+	}
+```
+### StudentController.java
+```java
+@Autowired
+	private StudentService studentService;
+
+	@GetMapping("/student/search")
+	public ResponseEntity<PaginatedStudentResponse> readStudent(Pageable pageable) {
+		return ResponseEntity.ok(studentService.readStudent(pageable));
+	}
+	
+	@PostMapping("/student")
+	public ResponseEntity<Student> createProduct(@RequestBody Student student){
+		return ResponseEntity.ok().body(this.studentService.createStudent(student));
+	}
+```
 
 ## Configuration
 
