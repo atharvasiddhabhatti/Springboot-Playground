@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,26 +25,31 @@ public class PropertyController {
 	private PropertyService propertyService;
 	
 	@GetMapping("/property")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public List<Property> retriveAllProperties() {
 		return propertyService.retriveAllProperties();
 	}
 	
 	@PostMapping("/property")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Object> addProperty(@RequestBody Property property) {
 	     return propertyService.addProperty(property);
 	  }
 	
 	@GetMapping("/property/{id}")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public Optional<Property> getPropertyById(@PathVariable Integer id) {
 		return propertyService.getPropertyById(id);
 	}
 	
 	@DeleteMapping("/property/{id}")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public void deletePropertyById(@PathVariable Integer id) {
 		propertyService.deletePropertyById(id);
 		
 	}
 	@PatchMapping("/property")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Object> updateProperty(@RequestBody Property property) {
 	     return propertyService.updateProperty(property);
 	  }
